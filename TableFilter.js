@@ -28,13 +28,13 @@
    You can link them with a specific ID using `data-TableFilter="my custom ID"`
    The custom ID must be the same for your table and input element(s)
    Such as:
-   
+
    // Link 1 input element to 1 table
    <input data-TableFilter="myFirstElementToWatch" />
    table data-TableFilter="myFirstElementToWatch">
        ...
    </table>
-   
+
    // Link 1 input element to 2 tables
    <input data-TableFilter="mySecondElementToWatch" />
    <table data-TableFilter="mySecondElementToWatch">
@@ -43,8 +43,8 @@
    <table data-TableFilter="mySecondElementToWatch">
        ...
    </table>
-   
-   
+
+
    Select specific rows to check:
    You can specify rows to check if you don't want all of them to be.
    Just put `data-TableFilter-rows` with the row names you want to check
@@ -89,13 +89,15 @@ function TableFilterMain() {
                 // For each tr element (useful to get the row name and hide the whole row)
                 for (const tr of table.getElementsByTagName("tr")) {
                     const tds = tr.getElementsByTagName("td")
+                    let ok = false;
+
                     // For each element of a row
                     for (let i = 0; i < tds.length; i++) {
                         const td = tds[i];
                         // If rows to check are defined,
                         // And (The row we are checking has no row name (th)
                         // Or this row name is not to check)
-                        if (rowNames != null && (th.length <= i || !rowNames.includes(th[i].textContent))) {
+                        if (ok || (rowNames != null && (th.length <= i || !rowNames.includes(th[i].textContent)))) {
                             continue;
                         }
 
@@ -104,6 +106,7 @@ function TableFilterMain() {
 
                         // If the value of our input element is somewhere in the value of the row
                         if ((td.textContent || td.innerText || "").toUpperCase().indexOf(inputValue) > -1) {
+                            ok = true;
                             if (tr.style.display === "none") {
                                 tr.style.display = "";
                             }
